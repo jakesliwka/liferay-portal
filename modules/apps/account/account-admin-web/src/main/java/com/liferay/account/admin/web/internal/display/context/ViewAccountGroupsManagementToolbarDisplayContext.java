@@ -36,6 +36,7 @@ import com.liferay.portal.kernel.portlet.PortletURLUtil;
 import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.service.permission.PortalPermissionUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 
 import java.util.ArrayList;
@@ -153,9 +154,17 @@ public class ViewAccountGroupsManagementToolbarDisplayContext
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
-		return PortalPermissionUtil.contains(
-			themeDisplay.getPermissionChecker(),
-			AccountActionKeys.ADD_ACCOUNT_GROUP);
+		if (PortalPermissionUtil.contains(
+				themeDisplay.getPermissionChecker(),
+				AccountActionKeys.ADD_ACCOUNT_GROUP))
+
+			return true;
+			else
+
+			return AccountGroupPermission.contains(
+				themeDisplay.getPermissionChecker(),
+				ParamUtil.getLong(liferayPortletRequest, "accountGroupId"),
+				ActionKeys.UPDATE);
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
